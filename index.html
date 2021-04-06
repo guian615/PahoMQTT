@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>MQTT</title>
+
+    <style>
+        body {
+            background-image: url("");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-sm" style="margin-top: 200px;">
+                    <h1>𝗠𝗤𝗧𝗧 𝗼𝘃𝗲𝗿 𝗪𝗲𝗯 𝗦𝗼𝗰𝗸𝗲𝘁</h1>
+                </div>
+                <div class="col-sm">
+                    <img src="https://freedesignfile.com/upload/2020/07/Communication-vector.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="card" style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                        <div class="card-header bg-primary text-light">
+                            <h2>Broker</h2>
+                        </div>
+                        <ul class="list-group list-group-flush" style="margin-left: 10px;">
+                            <div class="mt-1">
+                                <h3>Address:</h3>
+                            </div>
+                            <div class="mt-1">
+                                <input type="text" class="form-control" value="wss://test.mosquito.org:8081/mqtt"
+                                    style="width: 95%;">
+                            </div>
+                            <div class="mt-3">
+                                <a class="btn btn-primary text-light" id="connect" role="button">Connect</a>
+                                <button id="disconnect" class="btn btn-warning text-light"
+                                    type="submit">Disconnect</button>
+                            </div>
+                            <div class="mt-2">
+                                <h3>Status:</h3>
+                            </div>
+                            <div class="mt-1 mb-4">
+                                <input type="text" class="form-control" id="status" value="Press Connect"
+                                    style="width: 95%;" disabled>
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="modal-dialog mt-4" role="document">
+                        <div class="modal-content" style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                            <div class="modal-header  message-header bg-primary text-light">
+                                <h5 class="modal-title">Incoming Messages</h5>
+                                <button id="ClearIncomingTable" class="btn btn-danger ">Clear</button>
+                            </div>
+                            <div class="modal-body" style="overflow-y:auto;height: 300px;">
+                                <table id="tMessage" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Topic</th>
+                                            <th scope="col">Payload</th>
+                                            <th scope="col">Time Stamp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                        <div class="card-header bg-primary text-light">
+                            <h2>Publish</h2>
+                        </div>
+                        <ul class="list-group list-group-flush" style="margin-left: 10px;">
+                            <div class="mt-1">
+                                <h3>Topic:</h3>
+                            </div>
+                            <div class="mt-1">
+                                <input type="text" id="topic" class="form-control" style="width: 95%;">
+                            </div>
+                            <div class="mt-1">
+                                <h3>Payload:</h3>
+                            </div>
+                            <div class="mt-1">
+                                <input type="text" id="payload" class="form-control" style="width: 95%;">
+                            </div>
+                            <div class="mt-3 mb-4">
+                                <button id="published" class="btn btn-primary text-light" type="submit">Publish</button>
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="modal-dialog mt-4.5" role="document">
+                        <div class="modal-content" style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                            <div class="modal-header message-header bg-primary text-light">
+                                <h5 class="modal-title">Published Messages</h5>
+                                <button id="ClearPublished" class="btn btn-danger ">Clear</button>
+                            </div>
+                            <div class="modal-body" style="overflow-y:auto;height: 300px;">
+                                <table id="publishedTable" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Topic</th>
+                                            <th scope="col">Payload</th>
+                                            <th scope="col">Time Stamp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card " style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                        <div class="card-header bg-primary text-light mb-3">
+                            <h2>Subscribe</h2>
+                        </div>
+                        <ul class="list-group list-group-flush" style="margin-left: 10px;">
+                            <div class="mt-4">
+                                <h3>Topic:</h3>
+                            </div>
+                            <div class="mt-4">
+                                <input type="text" class="form-control" id="subtopic" style="width: 95%;">
+                            </div>
+                            <div class="mt-4 mb-5">
+                                <a class="btn btn-primary text-light" id="subscribe" role="button">Subscribe</a>
+                                <button class="btn btn-warning text-light" id="unsubscribe"
+                                    type="submit">Unsubscribe</button>
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="modal-dialog mt-3.5" role="document">
+                        <div class="modal-content" style="box-shadow: rgb(0, 0, 0) 0px 20px 30px -10px;">
+                            <div class="modal-header message-header bg-primary text-light">
+                                <h5 class="modal-title ">Subcribed Messages</h5>
+                                <button id="Clear" class="btn btn-danger ">Clear</button>
+                            </div>
+                            <div class="modal-body" style="overflow-y:auto;height: 300px;">
+                                <table class="table" id="subscribeTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Topic</th>
+                                            <th scope="col">Time Stamp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./browserMqtt.js"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>
